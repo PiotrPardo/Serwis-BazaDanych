@@ -1,0 +1,51 @@
+-Podgl¹d ca³kowitego kosztu wizyty
+
+SELECT  SUM(kosztwizyty) Koszt_Wizyty
+FROM
+        ( 
+            SELECT SUM( n . "Koszt_uslugi") kosztwizyty
+FROM "Naprawy" n  JOIN "Rejestry napraw" w ON n."Naprawa_ID" = w."Naprawa_ID"
+JOIN "Wizyty" v ON w."Wizyta_ID"=v."Wizyta_ID"
+WHERE v."Wizyta_ID" = 1 
+            UNION ALL
+            SELECT SUM( c . "Cena") kosztwizyty
+FROM "Czesci" c 
+JOIN "Rejestry czesci" d ON c."Czesc_ID" = d."Czesc_ID"
+JOIN "Wizyty" v ON d."Wizyta_ID"=v."Wizyta_ID"
+WHERE v."Wizyta_ID" = 1 
+        )   
+
+-Uzyskanie o iloœci pracowników na danym stanowisku
+
+SELECT COUNT(p."Pracownik_ID") as "Mechanicy" 
+FROM "Pracownicy" p 
+WHERE "Stanowisko ID" = 4;
+
+
+-Podgl¹d danych pracowników
+
+SELECT 
+p."Imie",
+p."Nazwisko",
+s."Nazwa stanowiska",
+p."Data_zatrudnienia",
+p."Pesel",
+p."Data_urodzenia",
+p."Nr_telefonu",  
+a."Ulica",
+a."Numer",
+a."Miejscowosc"
+FROM "Pracownicy" p
+JOIN "Stanowiska" s ON p."Stanowisko ID"=s."Stanowisko_ID"
+JOIN "Adresy" a ON p."Adres ID"=a."Adres_ID"
+WHERE p."Serwis_ID" = 1;
+
+
+-Uzyskanie informacji o 
+
+SELECT SUM( c . "Cena") AS "Suma_czesci_za_rok_2018"
+FROM "Czesci" c 
+JOIN "Rejestry czesci" d ON c."Czesc_ID" = d."Czesc_ID"
+JOIN "Wizyty" v ON d."Wizyta_ID"=v."Wizyta_ID"
+WHERE v."Data_wizyty" 
+BETWEEN '2018-01-01' AND '2018-12-31'
